@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Teacher;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Training;
-use App\Models\Enrollment;
 
 class TeacherController extends Controller
 {
@@ -34,20 +33,30 @@ class TeacherController extends Controller
     {
         $user = auth()->user();
 
-        $trainings = Training::with(['course', 'enrollments'])
+        $courses = Training::with('course')
             ->where('teacher_id', $user->user_id)
-            ->get();
+            ->get()
+            ->pluck('course')
+            ->unique('course_id')
+            ->values();
 
-        return view('teacher.courses.index', compact('trainings'));
+        return view('teacher.courses.index', compact('courses'));
     }
 
     public function students($id)
     {
-        $training = Training::with('course')->findOrFail($id);
+        $user = auth()->user();
 
-        $students = Enrollment::with('student.person')
+        $training = Training::with([
+            'course',
+            'enrollments.student.person',
+            'enrollments.progress'
+        ])
             ->where('training_id', $id)
-            ->get();
+            ->where('teacher_id', $user->user_id)
+            ->firstOrFail();
+
+        $students = $training->enrollments;
 
         return view('teacher.courses.students', compact('training', 'students'));
     }

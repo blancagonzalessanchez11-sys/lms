@@ -5,11 +5,8 @@
     <div class="container">
 
         <div class="d-flex justify-content-between mb-3">
-            <h2>Cursos (Admin)</h2>
+            <h2>Mis cursos</h2>
 
-            <a href="{{ route('admin.courses.create') }}" class="btn btn-primary">
-                + Crear curso
-            </a>
         </div>
 
         <table class="table table-bordered bg-white">
@@ -18,35 +15,32 @@
                     <th>ID</th>
                     <th>Título</th>
                     <th>Precio</th>
-                    <th>Acciones</th>
+                    <th>Horas</th>
                 </tr>
             </thead>
 
             <tbody>
-                @foreach($courses as $course)
+                @forelse($courses as $course)
+                        <tr data-id="{{ $course->course_id }}">
+                            <td>{{ $course->course_id }}</td>
+                            <td>{{ $course->title }}</td>
+
+                            <td>
+                                {{ $course->reference_price
+                    ? 'S/ ' . number_format($course->reference_price, 2)
+                    : '—' 
+                        }}
+                            </td>
+
+                            <td>{{ $course->hours_count ?? '—' }}</td>
+                        </tr>
+                @empty
                     <tr>
-                        <td>{{ $course->course_id }}</td>
-                        <td>{{ $course->title }}</td>
-                        <td>S/ {{ $course->reference_price }}</td>
-
-                        <td class="d-flex gap-2">
-
-                            <a href="{{ route('admin.courses.edit', $course->course_id) }}" class="btn btn-sm btn-warning">
-                                Editar
-                            </a>
-
-                            <form method="POST" action="{{ route('admin.courses.destroy', $course->course_id) }}">
-                                @csrf
-                                @method('DELETE')
-
-                                <button class="btn btn-sm btn-danger">
-                                    Eliminar
-                                </button>
-                            </form>
-
+                        <td colspan="4" class="text-center text-muted">
+                            No tienes cursos asignados aún
                         </td>
                     </tr>
-                @endforeach
+                @endforelse
             </tbody>
 
         </table>
