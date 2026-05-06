@@ -4,47 +4,70 @@
 
     <div class="container">
 
-        <div class="d-flex justify-content-between mb-3">
-            <h2>Mis cursos</h2>
-
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="mb-0">Mis cursos</h2>
         </div>
 
-        <table class="table table-bordered bg-white">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Título</th>
-                    <th>Precio</th>
-                    <th>Horas</th>
-                </tr>
-            </thead>
+        <div class="table-responsive">
+            <table class="table table-sm table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th class="align-middle">Avatar</th>
+                        <th class="align-middle">Curso</th>
+                        <th class="align-middle">Detalles</th>
+                        <th class="align-middle">Estado</th>
+                        <th class="align-middle text-end">Acciones</th>
+                    </tr>
+                </thead>
 
-            <tbody>
-                @forelse($courses as $course)
-                        <tr data-id="{{ $course->course_id }}">
-                            <td>{{ $course->course_id }}</td>
-                            <td>{{ $course->title }}</td>
-
-                            <td>
-                                {{ $course->reference_price
-                    ? 'S/ ' . number_format($course->reference_price, 2)
-                    : '—' 
-                        }}
+                <tbody>
+                    @forelse($courses as $course)
+                        <tr>
+                            <td class="align-middle pe-3">
+                                <div class="avatar-circle rounded-circle bg-avatar-{{ ($loop->index % 4) + 1 }}">
+                                    {{ strtoupper(substr($course->title, 0, 1)) }}
+                                </div>
                             </td>
 
-                            <td>{{ $course->hours_count ?? '—' }}</td>
-                        </tr>
-                @empty
-                    <tr>
-                        <td colspan="4" class="text-center text-muted">
-                            No tienes cursos asignados aún
-                        </td>
-                    </tr>
-                @endforelse
-            </tbody>
+                            <td class="align-middle">
+                                <div class="fw-bold">{{ $course->title }}</div>
+                            </td>
 
-        </table>
+                            <td class="align-middle">
+                                <div class="text-muted small">
+                                    Alumnos matriculados: {{ $course->trainings->sum(fn($training) => $training->enrollments->count()) ?? 0 }}<br>
+                                    Precio: S/ {{ number_format($course->reference_price, 2) }}
+                                </div>
+                            </td>
+
+                            <td class="align-middle">
+                                <span class="badge bg-success">Activo</span>
+                            </td>
+
+                            <td class="align-middle text-end">
+                                <button class="btn btn-sm btn-info" onclick="viewDetails({{ $course->course_id }})">
+                                    <i class="bi bi-eye"></i> Ver detalles
+                                </button>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5" class="text-center text-muted">
+                                No tienes cursos asignados aún
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
 
     </div>
+
+    <script>
+        function viewDetails(courseId) {
+            // Lógica para ver detalles del curso (puede redirigir o abrir modal)
+            window.location.href = `/teacher/courses/${courseId}`;
+        }
+    </script>
 
 @endsection
