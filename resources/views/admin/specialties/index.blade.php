@@ -2,45 +2,56 @@
 
 @section('content')
     <div class="container">
-        <div class="d-flex justify-content-between mb-3">
-            <h2>Especialidades</h2>
-
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="mb-0">Especialidades</h2>
             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createSpecialtyModal">
                 + Crear especialidad
             </button>
         </div>
 
-        <table class="table table-borderless">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>Especialidad</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($specialties as $specialty)
+        <div class="table-responsive">
+            <table class="table table-sm table-striped table-hover">
+                <thead>
                     <tr>
-                        <td>
-                            <div class="avatar-circle rounded-circle bg-avatar-{{ ($loop->index % 4) + 1 }}">
-                                {{ strtoupper(substr($specialty->specialty, 0, 1)) }}
-                            </div>
-                        </td>
-                        <td>{{ $specialty->specialty }}</td>
-                        <td class="d-flex gap-2">
-                            <button class="btn btn-sm btn-primary edit-btn" 
-                                    data-id="{{ $specialty->specialty_id }}" 
-                                    data-specialty="{{ $specialty->specialty }}">
-                                <i class="bi bi-pencil-square"></i>
-                            </button>
-                            <button class="btn btn-sm btn-danger" onclick="confirmDelete('{{ route('admin.specialties.destroy', $specialty->specialty_id) }}')">
-                                <i class="bi bi-trash3-fill"></i>
-                            </button>
-                        </td>
+                        <th class="align-middle">Avatar</th>
+                        <th class="align-middle">Especialidad</th>
+                        <th class="align-middle">Detalles</th>
+                        <th class="align-middle">Estado</th>
+                        <th class="align-middle text-end">Acciones</th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach($specialties as $specialty)
+                        <tr>
+                            <td class="align-middle pe-3">
+                                <div class="avatar-circle rounded-circle bg-avatar-{{ ($loop->index % 4) + 1 }}">
+                                    {{ strtoupper(substr($specialty->specialty, 0, 1)) }}
+                                </div>
+                            </td>
+                            <td class="align-middle">
+                                <div class="fw-bold">{{ $specialty->specialty }}</div>
+                            </td>
+                            <td class="align-middle">
+                                <div class="text-muted small">Cursos: {{ $specialty->courses->count() ?? 0 }}</div>
+                            </td>
+                            <td class="align-middle">
+                                <span class="badge bg-success">Activo</span>
+                            </td>
+                            <td class="align-middle text-end">
+                                <button class="btn btn-sm btn-primary edit-btn"
+                                        data-id="{{ $specialty->specialty_id }}"
+                                        data-specialty="{{ $specialty->specialty }}">
+                                    <i class="bi bi-pencil-square"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger" onclick="confirmDelete('{{ route('admin.specialties.destroy', $specialty->specialty_id) }}')">
+                                    <i class="bi bi-trash3-fill"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
 
         <!-- Modal -->
         <div class="modal fade" id="createSpecialtyModal" tabindex="-1" aria-labelledby="createSpecialtyModalLabel" aria-hidden="true">
@@ -96,9 +107,7 @@
                 const specialty = this.getAttribute('data-specialty');
 
                 document.getElementById('edit_specialty').value = specialty;
-
                 document.getElementById('editForm').action = `/admin/specialties/${id}`;
-
                 new bootstrap.Modal(document.getElementById('editModal')).show();
             });
         });

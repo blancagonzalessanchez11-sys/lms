@@ -4,57 +4,66 @@
 
     <div class="container">
 
-        <div class="d-flex justify-content-between mb-3">
-            <h2>Cursos (Admin)</h2>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="mb-0">Cursos</h2>
 
             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createCourseModal">
                 + Crear curso
             </button>
         </div>
 
-        <table class="table table-striped table-hover">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>Título</th>
-                    <th>Precio</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                @foreach($courses as $course)
+        <div class="table-responsive">
+            <table class="table table-sm table-striped table-hover">
+                <thead>
                     <tr>
-                        <td>
-                            <div class="avatar-circle rounded-circle bg-avatar-{{ ($loop->index % 4) + 1 }}">
-                                {{ strtoupper(substr($course->title, 0, 1)) }}
-                            </div>
-                        </td>
-                        <td>{{ $course->title }}</td>
-                        <td>S/ {{ $course->reference_price }}</td>
-
-                        <td class="d-flex gap-2">
-
-                            <button class="btn btn-sm btn-primary edit-btn" 
-                                    data-id="{{ $course->course_id }}" 
-                                    data-title="{{ $course->title }}" 
-                                    data-description="{{ $course->description }}" 
-                                    data-specialty="{{ $course->specialty_id }}" 
-                                    data-hours="{{ $course->hours_count }}" 
-                                    data-price="{{ $course->reference_price }}">
-                                <i class="bi bi-pencil-square"></i>
-                            </button>
-
-                            <button class="btn btn-sm btn-danger" onclick="confirmDelete('{{ route('admin.courses.destroy', $course->course_id) }}')">
-                                <i class="bi bi-trash3-fill"></i>
-                            </button>
-
-                        </td>
+                        <th class="align-middle">Avatar</th>
+                        <th class="align-middle">Título</th>
+                        <th class="align-middle">Detalles</th>
+                        <th class="align-middle">Estado</th>
+                        <th class="align-middle text-end">Acciones</th>
                     </tr>
-                @endforeach
-            </tbody>
+                </thead>
 
-        </table>
+                <tbody>
+                    @foreach($courses as $course)
+                        <tr>
+                            <td class="align-middle pe-3">
+                                <div class="avatar-circle rounded-circle bg-avatar-{{ ($loop->index % 4) + 1 }}">
+                                    {{ strtoupper(substr($course->title, 0, 1)) }}
+                                </div>
+                            </td>
+                            <td class="align-middle">
+                                <div class="fw-bold">{{ $course->title }}</div>
+                                <div class="text-muted small">{{ optional($course->specialty)->specialty ?? 'Sin especialidad' }}</div>
+                            </td>
+                            <td class="align-middle">
+                                <div class="text-muted small">
+                                    Precio: S/ {{ number_format($course->reference_price, 2) }}<br>
+                                    Horas: {{ $course->hours_count ?? 0 }}
+                                </div>
+                            </td>
+                            <td class="align-middle">
+                                <span class="badge bg-info">{{ $course->hours_count ? $course->hours_count . ' hrs' : 'Sin horas' }}</span>
+                            </td>
+                            <td class="align-middle text-end">
+                                <button class="btn btn-sm btn-primary edit-btn"
+                                        data-id="{{ $course->course_id }}"
+                                        data-title="{{ $course->title }}"
+                                        data-description="{{ $course->description }}"
+                                        data-specialty="{{ $course->specialty_id }}"
+                                        data-hours="{{ $course->hours_count }}"
+                                        data-price="{{ $course->reference_price }}">
+                                    <i class="bi bi-pencil-square"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger" onclick="confirmDelete('{{ route('admin.courses.destroy', $course->course_id) }}')">
+                                    <i class="bi bi-trash3-fill"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
 
         <!-- Modal -->
         <div class="modal fade" id="createCourseModal" tabindex="-1" aria-labelledby="createCourseModalLabel" aria-hidden="true">

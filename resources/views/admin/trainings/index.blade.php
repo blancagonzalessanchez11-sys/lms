@@ -4,64 +4,78 @@
 
     <div class="container">
 
-        <div class="d-flex justify-content-between mb-3">
+        <div class="d-flex justify-content-between align-items-center mb-3">
             <div>
-                <h2>Capacitaciones</h2>
-                <a href="{{ route('admin.dashboard') }}" class="btn btn-secondary btn-sm mt-2">
-                    Volver
-                </a>
+                <h2 class="mb-0">Capacitaciones</h2>
+                <a href="{{ route('admin.dashboard') }}" class="btn btn-secondary btn-sm mt-2">Volver</a>
             </div>
             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createTrainingModal">
                 + Crear capacitación
             </button>
         </div>
 
-        <table class="table table-borderless">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>Curso</th>
-                    <th>Profesor</th>
-                    <th>Modalidad</th>
-                    <th>Precio</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse($trainings as $training)
+        <div class="table-responsive">
+            <table class="table table-sm table-striped table-hover">
+                <thead>
                     <tr>
-                        <td>
-                            <div class="avatar-circle rounded-circle bg-avatar-{{ ($loop->index % 4) + 1 }}">
-                                {{ strtoupper(substr(optional($training->course)->title ?? 'C', 0, 1)) }}
-                            </div>
-                        </td>
-                        <td>{{ optional($training->course)->title }}</td>
-                        <td>{{ optional($training->teacher->person)->first_names ?? 'Sin nombre' }}</td>
-                        <td>{{ ucfirst($training->modality) }}</td>
-                        <td>S/ {{ number_format($training->price, 2) }}</td>
-                        <td class="d-flex gap-2">
-                            <button class="btn btn-sm btn-primary edit-btn" 
-                                    data-id="{{ $training->training_id }}" 
-                                    data-course="{{ $training->course_id }}" 
-                                    data-teacher="{{ $training->teacher_id }}" 
-                                    data-modality="{{ $training->modality }}" 
-                                    data-price="{{ $training->price }}">
-                                <i class="bi bi-pencil-square"></i>
-                            </button>
-                            <button class="btn btn-sm btn-danger" onclick="confirmDelete('{{ route('admin.trainings.destroy', $training->training_id) }}')">
-                                <i class="bi bi-trash3-fill"></i>
-                            </button>
-                        </td>
+                        <th class="align-middle">Avatar</th>
+                        <th class="align-middle">Capacitación</th>
+                        <th class="align-middle">Detalles</th>
+                        <th class="align-middle">Estado</th>
+                        <th class="align-middle text-end">Acciones</th>
                     </tr>
-                @empty
-                    <tr>
-                        <td colspan="6" class="text-center">
-                            No hay capacitaciones activas
-                        </td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @forelse($trainings as $training)
+                        <tr>
+                            <td class="align-middle pe-3">
+                                <div class="avatar-circle rounded-circle bg-avatar-{{ ($loop->index % 4) + 1 }}">
+                                    {{ strtoupper(substr(optional($training->course)->title ?? 'C', 0, 1)) }}
+                                </div>
+                            </td>
+                            <td class="align-middle">
+                                <div class="fw-bold">{{ optional($training->course)->title ?? 'Sin curso' }}</div>
+                                <div class="text-muted small">{{ optional($training->teacher->person)->first_names ?? 'Sin nombre' }}</div>
+                            </td>
+                            <td class="align-middle">
+                                <div class="text-muted small">
+                                    Modalidad: {{ ucfirst($training->modality) }}<br>
+                                    Precio: S/ {{ number_format($training->price, 2) }}
+                                </div>
+                            </td>
+                            <td class="align-middle">
+                                @php
+                                    $badgeClass = match($training->modality) {
+                                        'virtual' => 'bg-primary',
+                                        'presential' => 'bg-success',
+                                        'hybrid' => 'bg-warning text-dark',
+                                        default => 'bg-secondary',
+                                    };
+                                @endphp
+                                <span class="badge {{ $badgeClass }}">{{ ucfirst($training->modality) }}</span>
+                            </td>
+                            <td class="align-middle text-end">
+                                <button class="btn btn-sm btn-primary edit-btn"
+                                        data-id="{{ $training->training_id }}"
+                                        data-course="{{ $training->course_id }}"
+                                        data-teacher="{{ $training->teacher_id }}"
+                                        data-modality="{{ $training->modality }}"
+                                        data-price="{{ $training->price }}">
+                                    <i class="bi bi-pencil-square"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger" onclick="confirmDelete('{{ route('admin.trainings.destroy', $training->training_id) }}')">
+                                    <i class="bi bi-trash3-fill"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5" class="text-center">No hay capacitaciones activas</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
 
         <!-- Modal -->
         <div class="modal fade" id="createTrainingModal" tabindex="-1" aria-labelledby="createTrainingModalLabel" aria-hidden="true">

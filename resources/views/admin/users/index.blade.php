@@ -2,38 +2,52 @@
 
 @section('content')
     <div class="container">
-        <div class="d-flex justify-content-between mb-3">
-            <h2>Lista de Estudiantes</h2>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="mb-0">Usuarios</h2>
+            <button class="btn btn-primary disabled" aria-disabled="true">+ Crear usuario</button>
         </div>
 
-        <table class="table table-striped table-hover">
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Iniciales</th>
-                    <th>Progreso</th>
-                    <th>Última participación</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($users as $user)
+        <div class="table-responsive">
+            <table class="table table-sm table-striped table-hover">
+                <thead>
                     <tr>
-                        <td>{{ $user->person->first_names ?? 'Sin nombre' }} {{ $user->person->last_names ?? '' }}</td>
-                        <td>
-                            <div class="avatar-circle rounded-circle bg-avatar-{{ ($loop->index % 4) + 1 }}">
-                                {{ strtoupper(substr($user->person->first_names ?? 'S', 0, 1) . substr($user->person->last_names ?? 'N', 0, 1)) }}
-                            </div>
-                        </td>
-                        <td>
-                            <div class="progress" style="height: 8px;">
-                                <div class="progress-bar bg-info progress-bar-striped" role="progressbar" style="width: 75%;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                        </td>
-                        <td>{{ $user->updated_at ? $user->updated_at->diffForHumans() : 'Nunca' }}</td>
+                        <th class="align-middle">Avatar</th>
+                        <th class="align-middle">Nombre</th>
+                        <th class="align-middle">Detalles</th>
+                        <th class="align-middle">Estado</th>
+                        <th class="align-middle text-end">Acciones</th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach($users as $user)
+                        @php
+                            $fullName = trim(($user->person->first_names ?? 'Sin nombre') . ' ' . ($user->person->last_names ?? ''));
+                            $initials = strtoupper(substr($user->person->first_names ?? 'S', 0, 1) . substr($user->person->last_names ?? 'N', 0, 1));
+                            $roleName = $user->roles->pluck('name')->first() ?? 'Usuario';
+                        @endphp
+                        <tr>
+                            <td class="align-middle pe-3">
+                                <div class="avatar-circle rounded-circle bg-avatar-{{ ($loop->index % 4) + 1 }}">
+                                    {{ $initials }}
+                                </div>
+                            </td>
+                            <td class="align-middle">
+                                <div class="fw-bold">{{ $fullName }}</div>
+                            </td>
+                            <td class="align-middle">
+                                <div class="text-muted small">{{ $user->email ?? 'Sin email' }}</div>
+                            </td>
+                            <td class="align-middle">
+                                <span class="badge bg-primary">{{ $roleName }}</span>
+                            </td>
+                            <td class="align-middle text-end">
+                                <button class="btn btn-sm btn-info">Ver Detalles</button>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
 
         {{ $users->links() }}
     </div>
