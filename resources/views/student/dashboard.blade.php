@@ -41,12 +41,11 @@
 
                     <p>
                         Estado:
-                        <strong>{{ $enrollment->status }}</strong>
+                        <strong>{{ $enrollment->status == 'A' ? 'Activo' : $enrollment->status }}</strong>
                     </p>
 
                     @php
-                        $progress = $enrollment->status == 'completed' ? 100 :
-                            ($enrollment->status == 'in_progress' ? 50 : 10);
+                        $progress = $enrollment->status == 'A' ? 50 : 10;
                     @endphp
 
                     <div class="progress-bar">

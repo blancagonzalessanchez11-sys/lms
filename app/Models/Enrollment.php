@@ -12,6 +12,7 @@ class Enrollment extends Model
         'training_id',
         'student_id',
         'administrator_id',
+        'enrollment_date',
         'status'
     ];
 

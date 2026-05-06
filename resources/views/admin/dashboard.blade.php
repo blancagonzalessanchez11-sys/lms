@@ -10,8 +10,8 @@
 
         <div class="col-md-3">
             <div class="card p-3 shadow-sm text-center">
-                <h5>Usuarios</h5>
-                <h2>{{ $totalUsers }}</h2>
+                <h5>Estudiantes</h5>
+                <h2>{{ $totalStudents }}</h2>
             </div>
         </div>
 

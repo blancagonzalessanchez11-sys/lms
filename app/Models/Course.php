@@ -21,4 +21,9 @@ class Course extends Model
     {
         return $this->hasMany(Training::class, 'course_id', 'course_id');
     }
+
+    public function specialty()
+    {
+        return $this->belongsTo(Specialty::class, 'specialty_id', 'specialty_id');
+    }
 }

@@ -13,14 +13,12 @@ class TeacherController extends Controller
         $user = auth()->user();
 
         $trainings = Training::with(['course', 'enrollments'])
+            ->withCount('enrollments')
             ->where('teacher_id', $user->user_id)
             ->get();
 
         $totalCourses = $trainings->count();
-
-        $totalStudents = $trainings->sum(function ($t) {
-            return $t->enrollments->count();
-        });
+        $totalStudents = $trainings->sum('enrollments_count');
 
         return view('teacher.dashboard', compact(
             'trainings',

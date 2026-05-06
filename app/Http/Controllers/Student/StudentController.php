@@ -20,8 +20,8 @@ class StudentController extends Controller
             ->get();
 
         $totalCourses = $enrollments->count();
-        $completed = $enrollments->where('status', 'completed')->count();
-        $inProgress = $enrollments->where('status', 'in_progress')->count();
+        $completed = 0; // TODO: Implementar estados 'C' (Completed) cuando se desarrolle la lógica de progreso.
+        $inProgress = $enrollments->where('status', 'A')->count();
 
         return view('student.dashboard', compact(
             'enrollments',

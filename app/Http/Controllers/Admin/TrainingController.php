@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Training;
 use App\Models\Course;
+use App\Models\User;
 
 class TrainingController extends Controller
 {
@@ -15,10 +16,14 @@ class TrainingController extends Controller
     public function index()
     {
         $trainings = Training::with('course')
+            ->where('status', 'A')
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return view('admin.trainings.index', compact('trainings'));
+        $courses = Course::all();
+        $teachers = User::whereHas('roles', fn($q) => $q->where('name', 'Teacher'))->get();
+
+        return view('admin.trainings.index', compact('trainings', 'courses', 'teachers'));
     }
 
     /**
@@ -46,7 +51,7 @@ class TrainingController extends Controller
         Training::create([
             'course_id' => $request->course_id,
             'teacher_id' => $request->teacher_id,
-            'administrator_id' => 1,
+            'administrator_id' => auth()->id(),
             'modality' => $request->modality,
             'price' => $request->price,
             'creation_date' => now()->toDateString(),
@@ -75,17 +80,19 @@ class TrainingController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'title' => 'required|string|max:255',
             'course_id' => 'required|exists:courses,course_id',
-            'description' => 'nullable|string',
+            'teacher_id' => 'required|exists:users,user_id',
+            'modality' => 'required|in:virtual,presential,hybrid',
+            'price' => 'required|numeric|min:0.01',
         ]);
 
         $training = Training::findOrFail($id);
 
         $training->update([
-            'title' => $request->title,
             'course_id' => $request->course_id,
-            'description' => $request->description,
+            'teacher_id' => $request->teacher_id,
+            'modality' => $request->modality,
+            'price' => $request->price,
         ]);
 
         return redirect()

@@ -5,18 +5,22 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Course;
+use App\Models\Specialty;
 
 class CourseController extends Controller
 {
     public function index()
     {
-        $courses = Course::latest()->get();
-        return view('admin.courses.index', compact('courses'));
+        $courses = Course::orderBy('created_at', 'desc')->get();
+        $specialties = Specialty::all();
+
+        return view('admin.courses.index', compact('courses', 'specialties'));
     }
 
     public function create()
     {
-        return view('admin.courses.create');
+        $specialties = Specialty::all();
+        return view('admin.courses.create', compact('specialties'));
     }
 
     public function store(Request $request)
@@ -46,7 +50,8 @@ class CourseController extends Controller
     public function edit($id)
     {
         $course = Course::findOrFail($id);
-        return view('admin.courses.edit', compact('course'));
+        $specialties = Specialty::all();
+        return view('admin.courses.edit', compact('course', 'specialties'));
     }
 
     public function update(Request $request, $id)

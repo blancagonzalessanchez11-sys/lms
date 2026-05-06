@@ -12,7 +12,18 @@ class AdminController extends Controller
 {
     public function dashboard()
     {
-        $totalUsers = User::count();
+        $totalStudents = User::whereHas('roles', function ($query) {
+            $query->where('name', 'Student');
+        })->count();
+
+        $totalTeachers = User::whereHas('roles', function ($query) {
+            $query->where('name', 'Teacher');
+        })->count();
+
+        $totalAdmins = User::whereHas('roles', function ($query) {
+            $query->where('name', 'Administrator');
+        })->count();
+
         $totalCourses = Course::count();
         $totalTrainings = Training::count();
         $totalEnrollments = Enrollment::count();
@@ -20,7 +31,9 @@ class AdminController extends Controller
         $latestUsers = User::latest()->take(5)->get();
 
         return view('admin.dashboard', compact(
-            'totalUsers',
+            'totalStudents',
+            'totalTeachers',
+            'totalAdmins',
             'totalCourses',
             'totalTrainings',
             'totalEnrollments',
