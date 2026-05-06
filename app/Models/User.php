@@ -39,6 +39,16 @@ class User extends Authenticatable
         return $this->hasMany(Enrollment::class, 'student_id', 'user_id');
     }
 
+    public function administratedTrainings()
+    {
+        return $this->hasMany(Training::class, 'administrator_id', 'user_id');
+    }
+
+    public function administratedEnrollments()
+    {
+        return $this->hasMany(Enrollment::class, 'administrator_id', 'user_id');
+    }
+
     public function getAuthPassword()
     {
         return $this->password;

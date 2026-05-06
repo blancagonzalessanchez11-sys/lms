@@ -37,15 +37,20 @@ class TrainingController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required|string|max:255',
             'course_id' => 'required|exists:courses,course_id',
-            'description' => 'nullable|string',
+            'teacher_id' => 'required|exists:users,user_id',
+            'modality' => 'required|in:virtual,presential,hybrid',
+            'price' => 'required|numeric|min:0.01',
         ]);
 
         Training::create([
-            'title' => $request->title,
             'course_id' => $request->course_id,
-            'description' => $request->description,
+            'teacher_id' => $request->teacher_id,
+            'administrator_id' => 1,
+            'modality' => $request->modality,
+            'price' => $request->price,
+            'creation_date' => now()->toDateString(),
+            'status' => 'A',
         ]);
 
         return redirect()

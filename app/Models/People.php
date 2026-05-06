@@ -17,4 +17,9 @@ class People extends Model
         'document_number',
         'email'
     ];
+
+    public function user()
+    {
+        return $this->hasOne(User::class, 'person_id', 'person_id');
+    }
 }

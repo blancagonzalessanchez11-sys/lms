@@ -17,4 +17,9 @@ class Progress extends Model
         'activity_date',
         'status'
     ];
+
+    public function enrollment()
+    {
+        return $this->belongsTo(Enrollment::class, 'enrollment_id', 'enrollment_id');
+    }
 }

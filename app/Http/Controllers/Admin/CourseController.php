@@ -22,17 +22,21 @@ class CourseController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required',
-            'description' => 'nullable',
-            'reference_price' => 'nullable|numeric'
+            'specialty_id' => 'required|exists:specialties,specialty_id',
+            'title' => 'required|string|max:150',
+            'description' => 'nullable|string',
+            'hours_count' => 'nullable|integer|min:0',
+            'reference_price' => 'nullable|numeric|min:0',
+            'banner_path' => 'nullable|string'
         ]);
 
         Course::create([
+            'specialty_id' => $request->specialty_id,
             'title' => $request->title,
             'description' => $request->description,
+            'hours_count' => $request->hours_count,
             'reference_price' => $request->reference_price,
-            'specialty_id' => $request->specialty_id ?? null,
-            'hours_count' => $request->hours_count ?? 0
+            'banner_path' => $request->banner_path
         ]);
 
         return redirect()->route('admin.courses.index')

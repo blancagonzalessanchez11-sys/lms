@@ -28,6 +28,11 @@ class Training extends Model
         return $this->belongsTo(User::class, 'teacher_id', 'user_id');
     }
 
+    public function administrator()
+    {
+        return $this->belongsTo(User::class, 'administrator_id', 'user_id');
+    }
+
     public function enrollments()
     {
         return $this->hasMany(Enrollment::class, 'training_id', 'training_id');

@@ -30,6 +30,14 @@ class AuthController extends Controller
             $user = Auth::user();
             $role = optional($user->roles->first())->name;
 
+            // Si el usuario no tiene rol asignado
+            if (!$role) {
+                Auth::logout();
+                return back()->withErrors([
+                    'username' => 'Usuario sin rol asignado. Contacte al administrador.'
+                ]);
+            }
+
             if ($role === 'Administrator') {
                 return redirect()->route('admin.dashboard');
             }

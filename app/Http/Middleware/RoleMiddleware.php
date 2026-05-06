@@ -11,7 +11,13 @@ class RoleMiddleware
     {
         $user = auth()->user();
 
-        if (!$user || !$user->roles->contains('name', $role)) {
+        // Si no está autenticado, redirigir a login
+        if (!$user) {
+            return redirect()->route('login');
+        }
+
+        // Si está autenticado pero sin el rol necesario
+        if (!$user->roles->contains('name', $role)) {
             abort(403, 'No autorizado');
         }
 
