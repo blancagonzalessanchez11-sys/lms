@@ -30,28 +30,29 @@
             </div>
         </div>
     @elseif($role === 'Teacher')
-        <ul class="nav flex-column gap-2">
-            <li>
-                <a href="{{ route('teacher.dashboard') }}" class="nav-link {{ request()->routeIs('teacher.dashboard') ? 'active bg-primary text-white' : '' }}">
-                    🧭 Dashboard
+        <div class="mb-3">
+            <h6 class="text-muted mb-2 small">General</h6>
+            <div class="d-grid gap-2">
+                <a href="{{ route('teacher.dashboard') }}" class="btn {{ request()->routeIs('teacher.dashboard') ? 'btn-primary' : 'btn-outline-primary' }} btn-sm">
+                    <i class="bi bi-house-door me-2"></i>Dashboard
                 </a>
-            </li>
-            <li>
-                <a href="{{ route('teacher.courses') }}" class="nav-link {{ request()->routeIs('teacher.courses') ? 'active bg-primary text-white' : '' }}">
-                    📚 Mis cursos
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <h6 class="text-muted mb-2 small">Gestión</h6>
+            <div class="d-grid gap-2">
+                <a href="{{ route('teacher.courses') }}" class="btn {{ request()->routeIs('teacher.courses.*') ? 'btn-primary' : 'btn-outline-primary' }} btn-sm">
+                    <i class="bi bi-journal-bookmark me-2"></i>Mis cursos
                 </a>
-            </li>
-            <li>
-                <a href="#" class="nav-link">
-                    📝 Evaluaciones
+                <a href="#" class="btn btn-outline-primary btn-sm">
+                    <i class="bi bi-clipboard-check me-2"></i>Evaluaciones
                 </a>
-            </li>
-            <li>
-                <a href="#" class="nav-link">
-                    👨‍🎓 Estudiantes
+                <a href="#" class="btn btn-outline-primary btn-sm">
+                    <i class="bi bi-people me-2"></i>Mis estudiantes
                 </a>
-            </li>
-        </ul>
+            </div>
+        </div>
     @elseif($role === 'Student')
         <ul class="nav flex-column gap-2">
             <li>
