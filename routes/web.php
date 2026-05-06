@@ -71,5 +71,7 @@ Route::prefix('teacher')->name('teacher.')->middleware(['auth', 'role:Teacher'])
 Route::prefix('student')->name('student.')->middleware(['auth', 'role:Student'])->group(function () {
 
     Route::get('/dashboard', [StudentController::class, 'index'])->name('dashboard');
+
+    Route::get('/courses', [StudentController::class, 'courses'])->name('courses.index');
 });
 

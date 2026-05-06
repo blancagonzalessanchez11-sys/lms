@@ -1,4 +1,4 @@
-@php
+    @php
     $role = optional(auth()->user()->roles->first())->name;
 @endphp
 
@@ -54,28 +54,29 @@
             </div>
         </div>
     @elseif($role === 'Student')
-        <ul class="nav flex-column gap-2">
-            <li>
-                <a href="{{ route('student.dashboard') }}" class="nav-link {{ request()->routeIs('student.dashboard') ? 'active bg-primary text-white' : '' }}">
-                    🧭 Dashboard
+        <div class="mb-3">
+            <h6 class="text-muted mb-2 small">General</h6>
+            <div class="d-grid gap-2">
+                <a href="{{ route('student.dashboard') }}" class="btn {{ request()->routeIs('student.dashboard') ? 'btn-primary' : 'btn-outline-primary' }} btn-sm">
+                    <i class="bi bi-house-door me-2"></i>Inicio
                 </a>
-            </li>
-            <li>
-                <a href="#" class="nav-link">
-                    📚 Mis cursos
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <h6 class="text-muted mb-2 small">Aprendizaje</h6>
+            <div class="d-grid gap-2">
+                <a href="{{ route('student.courses.index') }}" class="btn {{ request()->routeIs('student.courses.*') ? 'btn-primary' : 'btn-outline-primary' }} btn-sm">
+                    <i class="bi bi-book me-2"></i>Mis cursos
                 </a>
-            </li>
-            <li>
-                <a href="#" class="nav-link">
-                    📊 Progreso
+                <a href="#" class="btn btn-outline-primary btn-sm">
+                    <i class="bi bi-trophy me-2"></i>Mis calificaciones
                 </a>
-            </li>
-            <li>
-                <a href="#" class="nav-link">
-                    🏆 Certificados
+                <a href="#" class="btn btn-outline-primary btn-sm">
+                    <i class="bi bi-award me-2"></i>Certificados
                 </a>
-            </li>
-        </ul>
+            </div>
+        </div>
     @endif
 
     @auth
