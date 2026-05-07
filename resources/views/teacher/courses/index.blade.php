@@ -5,7 +5,7 @@
     <div class="container">
 
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h2 class="mb-0">Mis cursos</h2>
+            <h2 class="mb-0">Mis capacitaciones</h2>
         </div>
 
         <div class="table-responsive">
@@ -21,23 +21,23 @@
                 </thead>
 
                 <tbody>
-                    @forelse($courses as $course)
+                    @forelse($trainings as $training)
                         <tr>
                             <td class="align-middle pe-3">
                                 <div class="avatar-circle rounded-circle bg-avatar-{{ ($loop->index % 4) + 1 }}">
-                                    {{ strtoupper(substr($course->title, 0, 1)) }}
+                                    {{ strtoupper(substr($training->course->title, 0, 1)) }}
                                 </div>
                             </td>
 
                             <td class="align-middle">
-                                <div class="fw-bold">{{ $course->title }}</div>
+                                <div class="fw-bold">{{ $training->course->title }}</div>
                             </td>
 
                             <td class="align-middle">
                                 <div class="text-muted small">
-                                    Alumnos matriculados:
-                                    {{ $course->trainings->sum(fn($training) => $training->enrollments->count()) ?? 0 }}<br>
-                                    Precio: S/ {{ number_format($course->reference_price, 2) }}
+                                    Alumnos matriculados: {{ $training->enrollments->count() }}<br>
+                                    Precio: S/ {{ number_format($training->price, 2) }}<br>
+                                    Modalidad: {{ ucfirst($training->modality) }}
                                 </div>
                             </td>
 
@@ -46,15 +46,15 @@
                             </td>
 
                             <td class="align-middle text-end">
-                                <button class="btn btn-sm btn-info" onclick="viewDetails({{ $course->course_id }})">
-                                    <i class="bi bi-eye"></i> Ver detalles
-                                </button>
+                                <a href="{{ route('teacher.attendance', $training->training_id) }}" class="btn btn-sm btn-primary">
+                                    <i class="bi bi-clipboard-check"></i> Gestionar
+                                </a>
                             </td>
                         </tr>
                     @empty
                         <tr>
                             <td colspan="5" class="text-center text-muted">
-                                No tienes cursos asignados aún
+                                No tienes capacitaciones asignadas aún
                             </td>
                         </tr>
                     @endforelse

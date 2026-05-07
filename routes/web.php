@@ -64,6 +64,9 @@ Route::prefix('teacher')->name('teacher.')->middleware(['auth', 'role:Teacher'])
 
     Route::get('/attendance/{id}', [TeacherController::class, 'attendance'])->name('attendance');
     Route::post('/attendance/store', [TeacherController::class, 'storeAttendance'])->name('attendance.store');
+
+    Route::get('/tasks/create/{training_id}', [TeacherController::class, 'createTask'])->name('tasks.create');
+    Route::post('/tasks/store', [TeacherController::class, 'storeTask'])->name('tasks.store');
 });
 
 /*

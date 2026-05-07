@@ -2,6 +2,12 @@
 
 @section('content')
 <div class="container mx-auto px-4 py-8">
+    <div class="mb-4">
+        <a href="{{ route('teacher.courses') }}" class="text-decoration-none">
+            <i class="bi bi-arrow-left me-2"></i>Volver a mis cursos
+        </a>
+    </div>
+
     <div class="bg-white rounded-lg shadow-md p-6">
         <h1 class="text-2xl font-bold mb-6">Tomar Asistencia - {{ $training->course->title }}</h1>
 
