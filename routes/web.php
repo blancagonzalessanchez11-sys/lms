@@ -59,6 +59,7 @@ Route::prefix('teacher')->name('teacher.')->middleware(['auth', 'role:Teacher'])
     Route::get('/dashboard', [TeacherController::class, 'dashboard'])->name('dashboard');
 
     Route::get('/courses', [TeacherController::class, 'courses'])->name('courses');
+    Route::get('/courses/{id}', [TeacherController::class, 'show'])->name('courses.show');
 
     Route::get('/students/{id}', [TeacherController::class, 'students'])->name('students');
 

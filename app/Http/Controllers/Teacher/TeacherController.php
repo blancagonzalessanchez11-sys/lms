@@ -46,6 +46,28 @@ class TeacherController extends Controller
         return view('teacher.courses.index', compact('trainings'));
     }
 
+    public function show($id)
+    {
+        $user = auth()->user();
+
+        // Validar que el training pertenezca al docente (seguridad)
+        $training = Training::with([
+            'course',
+            'enrollments.student.person',
+            'assessments'
+        ])
+            ->where('training_id', $id)
+            ->where('teacher_id', $user->user_id)
+            ->firstOrFail();
+
+        // Contar estadísticas para el panel
+        $totalStudents = $training->enrollments->count();
+        $totalAssessments = $training->assessments->count();
+        $totalAttendanceRecords = Attendance::where('training_id', $id)->count();
+
+        return view('teacher.courses.show', compact('training', 'totalStudents', 'totalAssessments', 'totalAttendanceRecords'));
+    }
+
     public function students($id)
     {
         $user = auth()->user();
