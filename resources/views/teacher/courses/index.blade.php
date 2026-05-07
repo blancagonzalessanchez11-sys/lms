@@ -35,7 +35,8 @@
 
                             <td class="align-middle">
                                 <div class="text-muted small">
-                                    Alumnos matriculados: {{ $course->trainings->sum(fn($training) => $training->enrollments->count()) ?? 0 }}<br>
+                                    Alumnos matriculados:
+                                    {{ $course->trainings->sum(fn($training) => $training->enrollments->count()) ?? 0 }}<br>
                                     Precio: S/ {{ number_format($course->reference_price, 2) }}
                                 </div>
                             </td>
