@@ -9,7 +9,7 @@
 
     {{-- Sección de Estadísticas --}}
     <div class="row g-3 mb-5">  {{-- Gap reducido --}}
-        <div class="col-md-3">
+        <div class="col-md-4">
             <div class="card border-0 shadow-sm p-3">  {{-- Padding reducido --}}
                 <div class="card-body text-center">
                     <i class="bi bi-people-fill text-primary h4 mb-2"></i>
@@ -18,7 +18,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
             <div class="card border-0 shadow-sm p-3">
                 <div class="card-body text-center">
                     <i class="bi bi-mortarboard-fill text-success h4 mb-2"></i>
@@ -27,21 +27,12 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
             <div class="card border-0 shadow-sm p-3">
                 <div class="card-body text-center">
                     <i class="bi bi-clipboard-check-fill text-warning h4 mb-2"></i>
                     <h5 class="card-title h6 fw-bold">{{ $totalTasks }}</h5>
                     <p class="card-text small text-muted">Tareas Creadas</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card border-0 shadow-sm p-3">
-                <div class="card-body text-center">
-                    <i class="bi bi-graph-up-fill text-info h4 mb-2"></i>
-                    <h5 class="card-title h6 fw-bold">{{ $recentActivities->count() }}</h5>
-                    <p class="card-text small text-muted">Actividades Recientes</p>
                 </div>
             </div>
         </div>
