@@ -5,7 +5,7 @@
     <div class="container-fluid">
 
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h2 class="mb-0">Mis cursos</h2>
+            <h1 class="h3 mb-4 text-gray-800">Mis cursos</h1>
         </div>
 
         <div class="table-responsive">
@@ -40,7 +40,10 @@
 
                             <td class="align-middle">
                                 <div class="progress" style="width: 100px;">
-                                    <div class="progress-bar" role="progressbar" style="width: {{ $course->progress_percentage ?? 0 }}%;" aria-valuenow="{{ $course->progress_percentage ?? 0 }}" aria-valuemin="0" aria-valuemax="100">
+                                    <div class="progress-bar" role="progressbar"
+                                        style="width: {{ $course->progress_percentage ?? 0 }}%;"
+                                        aria-valuenow="{{ $course->progress_percentage ?? 0 }}" aria-valuemin="0"
+                                        aria-valuemax="100">
                                         {{ $course->progress_percentage ?? 0 }}%
                                     </div>
                                 </div>

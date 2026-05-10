@@ -1,84 +1,104 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mx-auto px-4 py-8">
-    <!-- Header -->
-    <div class="mb-8">
-        <h1 class="text-4xl font-bold text-gray-900">Mis Capacitaciones</h1>
-        <p class="text-gray-600 mt-2">Accede a tus cursos y gestiona tus estudiantes</p>
+    <div class="container-fluid px-4 py-1">
+        <!-- Header -->
+        <div class="mb-5">
+            <h1 class="h3 mb-4 text-gray-800">Mis Capacitaciones</h1>
+            <p class="text-muted">Accede a tus cursos y gestiona tus estudiantes</p>
+        </div>
+
+        <!-- Courses Grid -->
+        @if($trainings->count() > 0)
+            <div class="row g-4">
+                @foreach($trainings as $training)
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <a href="{{ route('teacher.courses.show', $training->training_id) }}" class="text-decoration-none">
+                            <div class="card h-100 shadow-sm rounded-3 border-0 position-relative overflow-hidden transition-all"
+                                style="transition: box-shadow 0.3s, transform 0.3s;">
+
+                                <!-- Gradient Header -->
+                                <div class="bg-primary bg-gradient p-5 text-white d-flex align-items-center justify-content-center"
+                                    style="height: 140px; font-size: 3rem; font-weight: bold; opacity: 0.9;">
+                                    {{ strtoupper(substr($training->course->title, 0, 1)) }}
+                                </div>
+
+                                <!-- Card Body -->
+                                <div class="card-body d-flex flex-column">
+                                    <!-- Course Info -->
+                                    <div>
+                                        <h5 class="card-title fw-bold text-dark mb-2">
+                                            {{ $training->course->title }}
+                                        </h5>
+                                        <p class="text-muted small">
+                                            Código: <strong class="text-dark">{{ $training->course->code ?? 'N/A' }}</strong>
+                                        </p>
+                                    </div>
+
+                                    <!-- Stats -->
+                                    <div class="row text-center mt-4 pt-3 border-top g-2 flex-grow-1 align-items-end">
+                                        <div class="col-6">
+                                            <div class="h5 fw-bold text-primary mb-1">
+                                                {{ $training->enrollments->count() }}
+                                            </div>
+                                            <small class="text-muted">Alumnos</small>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="h5 fw-bold text-success mb-1">
+                                                {{ ucfirst($training->modality) }}
+                                            </div>
+                                            <small class="text-muted">Modalidad</small>
+                                        </div>
+                                    </div>
+
+                                    <!-- Status Badge -->
+                                    <div class="mt-3">
+                                        <span class="badge bg-success">
+                                            ✓ Activo
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <!-- Footer Arrow -->
+                                <div class="card-footer bg-light border-top p-3 text-end">
+                                    <i class="bi bi-arrow-right text-muted" style="font-size: 1.2rem;"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                @endforeach
+            </div>
+        @else
+            <!-- Empty State -->
+            <div class="card shadow-sm rounded-3 border-0">
+                <div class="card-body text-center py-5">
+                    <i class="bi bi-inbox" style="font-size: 3rem;" class="text-muted"></i>
+                    <h5 class="card-title mt-4 text-dark fw-bold">No hay capacitaciones</h5>
+                    <p class="text-muted">
+                        No tienes cursos asignados aún. Contacta con el administrador.
+                    </p>
+                </div>
+            </div>
+        @endif
     </div>
 
-    <!-- Courses Grid -->
-    @if($trainings->count() > 0)
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            @foreach($trainings as $training)
-                <a href="{{ route('teacher.courses.show', $training->training_id) }}" class="group">
-                    <div class="bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden h-full flex flex-col">
-                        
-                        <!-- Color Header (based on course) -->
-                        <div class="h-32 bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
-                            <div class="text-5xl font-bold text-white opacity-80">
-                                {{ strtoupper(substr($training->course->title, 0, 1)) }}
-                            </div>
-                        </div>
+    <style>
+        .card {
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+        }
 
-                        <!-- Content -->
-                        <div class="p-6 flex-grow flex flex-col justify-between">
-                            <!-- Course Info -->
-                            <div>
-                                <h3 class="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
-                                    {{ $training->course->title }}
-                                </h3>
-                                <p class="text-sm text-gray-500 mt-1">
-                                    Código: <span class="font-semibold text-gray-700">{{ $training->course->code ?? 'N/A' }}</span>
-                                </p>
-                            </div>
+        .card:hover {
+            box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.15) !important;
+            transform: translateY(-4px);
+        }
 
-                            <!-- Stats -->
-                            <div class="mt-6 pt-6 border-t border-gray-200 grid grid-cols-2 gap-4">
-                                <div class="text-center">
-                                    <div class="text-2xl font-bold text-blue-600">
-                                        {{ $training->enrollments->count() }}
-                                    </div>
-                                    <p class="text-xs text-gray-600">Alumnos</p>
-                                </div>
-                                <div class="text-center">
-                                    <div class="text-2xl font-bold text-green-600">
-                                        {{ ucfirst($training->modality) }}
-                                    </div>
-                                    <p class="text-xs text-gray-600">Modalidad</p>
-                                </div>
-                            </div>
+        a {
+            color: inherit;
+            text-decoration: none !important;
+        }
 
-                            <!-- Status Badge -->
-                            <div class="mt-4">
-                                <span class="inline-block px-3 py-1 bg-green-100 text-green-800 text-xs font-semibold rounded-full">
-                                    ✓ Activo
-                                </span>
-                            </div>
-                        </div>
-
-                        <!-- Footer Arrow -->
-                        <div class="px-6 py-4 bg-gray-50 flex justify-end group-hover:bg-blue-50 transition-colors">
-                            <svg class="w-5 h-5 text-gray-400 group-hover:text-blue-600 transition-colors transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                            </svg>
-                        </div>
-                    </div>
-                </a>
-            @endforeach
-        </div>
-    @else
-        <!-- Empty State -->
-        <div class="bg-white rounded-lg shadow-md p-12 text-center">
-            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m0 0h6M6 12a6 6 0 100-12 6 6 0 000 12z"></path>
-            </svg>
-            <h3 class="mt-4 text-lg font-medium text-gray-900">No hay capacitaciones</h3>
-            <p class="mt-2 text-sm text-gray-600">
-                No tienes cursos asignados aún. Contacta con el administrador.
-            </p>
-        </div>
-    @endif
-</div>
+        a:hover {
+            color: inherit;
+        }
+    </style>
 @endsection

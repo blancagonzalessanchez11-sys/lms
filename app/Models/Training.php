@@ -42,4 +42,9 @@ class Training extends Model
     {
         return $this->hasMany(Attendance::class, 'training_id', 'training_id');
     }
+
+    public function assessments()
+    {
+        return $this->hasMany(Assessment::class, 'training_id', 'training_id');
+    }
 }

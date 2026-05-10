@@ -9,15 +9,19 @@ class Attendance extends Model
     protected $primaryKey = 'attendance_id';
 
     protected $fillable = [
-        'training_id',
-        'student_id',
-        'date',
-        'status'
+        'schedule_id',
+        'enrollment_id',
+        'attendance'
     ];
 
-    public function training()
+    public function schedule()
     {
-        return $this->belongsTo(Training::class, 'training_id', 'training_id');
+        return $this->belongsTo(Schedule::class, 'schedule_id', 'schedule_id');
+    }
+
+    public function enrollment()
+    {
+        return $this->belongsTo(Enrollment::class, 'enrollment_id', 'enrollment_id');
     }
 
     public function student()
